@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 app = Flask(__name__)
 
+default_max_chip=[50,50,50,50,100]
 
 @app.route("/", methods=['GET', 'POST'])
 def hello():
@@ -25,7 +26,12 @@ def hello():
         num_players=int(form_data.get('num_players'))
 
 
-
+        try:
+            for x in range(5):
+                if max_chip_counts[x] ==0:
+                    max_chip_counts[x]=default_max_chip[x]/num_players
+        except:
+            print()
 
 
 
@@ -60,8 +66,12 @@ def mobile():
         num_players=int(form_data.get('num_players'))
 
 
-
-
+        try:
+            for x in range(5):
+                if max_chip_counts[x] ==0:
+                    max_chip_counts[x]=default_max_chip[x]/num_players
+        except:
+            print()
 
 
 
