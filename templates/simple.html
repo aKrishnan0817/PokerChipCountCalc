@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        th {
+            padding: 12px;
+            border: 1px solid #dee2e6;
+            text-align: left;
+            position: sticky;
+            top: 0; /* Makes the header sticky */
+            z-index: 1;
+            color: white;
+            background-color: #6c757d; /* Gray header */
+        }
+        /* Simplified column colors */
+        .col-1 { background-color: rgba(245, 245, 245, 1); } /* Light Grayish/White */
+        .col-2 { background-color: rgba(255, 99, 71, 1); } /* Tomato (Reddish) */
+        .col-3 { background-color: rgba(70, 130, 180, 1); } /* SteelBlue (Bluish) */
+        .col-4 { background-color: rgba(60, 179, 113, 1); } /* MediumSeaGreen (Green) */
+        .col-5 { background-color: rgba(169, 169, 169, 1); color: white; } /* DarkGray */
+        td {
+            padding: 12px;
+            border: 1px solid #dee2e6;
+            text-align: left;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #e9ecef;
+        }
+        .title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            th, td {
+                padding: 8px;
+                font-size: 14px; /* Smaller font size for mobile */
+            }
+            .title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    {% for table in tables %}
+        <div>{{ table|safe }}</div>
+    {% endfor %}
+
+</body>
+</html>

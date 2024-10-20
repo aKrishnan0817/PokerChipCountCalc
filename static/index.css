@@ -1,0 +1,148 @@
+ .u-section-1 {
+  background-image: none;
+}
+
+.u-section-1 .u-sheet-1 {
+  min-height: 1906px;
+}
+
+.u-section-1 .u-shape-1 {
+  width: 163px;
+  height: 163px;
+  margin: 79px auto 0 63px;
+}
+
+.u-section-1 .u-shape-2 {
+  width: 163px;
+  height: 163px;
+  margin: -163px auto 0 263px;
+}
+
+.u-section-1 .u-shape-3 {
+  width: 163px;
+  height: 163px;
+  margin: -156px auto 0 476px;
+}
+
+.u-section-1 .u-shape-4 {
+  width: 163px;
+  height: 163px;
+  margin: -163px 288px 0 auto;
+}
+
+.u-section-1 .u-shape-5 {
+  width: 163px;
+  height: 163px;
+  margin: -163px 62px 0 auto;
+}
+
+.u-section-1 .u-form-1 {
+  background-image: none;
+  height: 244px;
+  --thumb-color: #478ac9;
+  --thumb-hover-color: #77aad9;
+  --track-color: #c0c0c0;
+  --track-active-color: #478ac9;
+  --number-width: 160px;
+  width: 1027px;
+  margin: 37px auto 60px;
+}
+
+.u-section-1 .u-text-1 {
+  margin-left: 0;
+  font-weight: 700;
+}
+
+.u-section-1 .u-form-group-2 {
+  --progress: 0%;
+  margin-left: 0;
+}
+
+.u-section-1 .u-form-group-3 {
+  --progress: 0%;
+  margin-left: 0;
+}
+
+.u-section-1 .u-form-group-4 {
+  --progress: 0%;
+  margin-left: 0;
+}
+
+.u-section-1 .u-form-group-5 {
+  --progress: 0%;
+  margin-left: 0;
+}
+
+.u-section-1 .u-form-group-6 {
+  --progress: 0%;
+  margin-left: 0;
+}
+
+.u-section-1 .u-form-group-7 {
+  margin-left: 0;
+}
+
+.u-section-1 .u-btn-1 {
+  background-image: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+@media (max-width: 1199px) {
+  .u-section-1 .u-shape-4 {
+    margin-top: 20px;
+  }
+
+  .u-section-1 .u-form-1 {
+    width: 940px;
+  }
+}
+
+@media (max-width: 991px) {
+  .u-section-1 .u-form-1 {
+    width: 720px;
+  }
+}
+
+@media (max-width: 767px) {
+  .u-section-1 .u-shape-3 {
+    margin-top: 20px;
+    margin-left: 377px;
+  }
+
+  .u-section-1 .u-form-1 {
+    width: 540px;
+  }
+}
+
+@media (max-width: 575px) {
+  .u-section-1 .u-shape-1 {
+    margin-top: 120px;
+    margin-left: auto;
+  }
+
+  .u-section-1 .u-shape-2 {
+    margin-top: 563px;
+    margin-left: auto;
+  }
+
+  .u-section-1 .u-shape-3 {
+    margin-top: -526px;
+    margin-left: auto;
+  }
+
+  .u-section-1 .u-shape-4 {
+    margin-top: 563px;
+    margin-right: auto;
+  }
+
+  .u-section-1 .u-shape-5 {
+    margin-top: 200px;
+    margin-right: auto;
+    margin-bottom: 60px;
+  }
+
+  .u-section-1 .u-form-1 {
+    width: 340px;
+  }
+}

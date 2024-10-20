@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poker Chip Count Calculator</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        .header {
+            font-family: 'Oswald', sans-serif;
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-container {
+            width: 90%;
+            max-width: 400px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .circles-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 columns */
+            gap: 10px;
+            justify-items: center; /* Center circles horizontally */
+            margin-bottom: 20px;
+        }
+        .circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+        .white-circle {
+            background-color: white;
+            border: 1px solid #ccc;
+        }
+        .red-circle {
+            background-color: red;
+        }
+        .blue-circle {
+            background-color: blue;
+        }
+        .green-circle {
+            background-color: green;
+        }
+        .black-circle {
+            background-color: black;
+        }
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 columns */
+            gap: 10px;
+            justify-items: center;
+        }
+        .number-grid input {
+            padding: 10px;
+            font-size: 18px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 45px; /* Limit the width of the input */
+        }
+        .label-row {
+            font-family: 'Oswald', sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            margin-top: 10px;
+
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">Poker Chip Count Calculator</div>
+
+    <!-- Colored Circles -->
+    <div class="circles-container">
+        <div class="circle white-circle"></div>
+        <div class="circle red-circle"></div>
+        <div class="circle blue-circle"></div>
+        <div class="circle green-circle"></div>
+        <div class="circle black-circle"></div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+      <form  method="post">
+
+
+        <!-- CHIP VALUES row -->
+        <div class="label-row">CHIP VALUES</div>
+        <div class="number-grid">
+            <input type="number" name="white_value" value="0.05" required>
+            <input type="number" name="red_value" value="0.1" required>
+            <input type="number" name="blue_value" value="0.25" required>
+            <input type="number" name="green_value" value="0.5" required>
+            <input type="number" name="black_value" value="1" required>
+        </div>
+
+        <!-- MINIMUM COUNTS row -->
+        <div class="label-row">MINIMUM COUNTS</div>
+        <div class="number-grid">
+            <input type="number" name="white_min" value="0" required>
+            <input type="number" name="red_min"value="0" required>
+            <input type="number" name="blue_min"value="0" required>
+            <input type="number" name="green_min" value="0" required>
+            <input type="number" name="black_min" value="0" required>
+        </div>
+
+        <!-- MAXIMUM COUNTS row -->
+        <div class="label-row">MAXIMUM COUNTS</div>
+        <div class="number-grid">
+          <input type="number" name="white_max" value="0" required>
+          <input type="number" name="red_max"value="0" required>
+          <input type="number" name="blue_max"value="0" required>
+          <input type="number" name="green_max" value="0" required>
+          <input type="number" name="black_max" value="0" required>
+        </div>
+
+        <div class="label-row">BUYIN & PLAYER COUNT</div>
+        <div class="number-grid">
+            <input type="number" name="buyin" value="0" required>
+            <input type="number" name="num_players" value="0" required>
+
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+
+</body>
+</html>
