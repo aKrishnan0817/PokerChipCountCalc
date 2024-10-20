@@ -1,13 +1,20 @@
 from flask import Flask, render_template, request
 import pandas as pd
 import numpy as np
+
+import json
 app = Flask(__name__)
 
 default_max_chip=[50,50,50,50,100]
 
+
+
+
 @app.route("/", methods=['GET', 'POST'])
 def hello():
     if request.method == 'POST':
+
+
         form_data = request.form
         email = form_data.get('white_value')
 
@@ -43,46 +50,17 @@ def hello():
         df = df.sort_values(by='White',ascending=False)
         html_table = color_code_df(df)
         return render_template('simple.html',  tables=[html_table], titles=df.columns.values)
-    return render_template('index.html')
 
-@app.route("/mobile", methods=['GET', 'POST'])
-def mobile():
-    if request.method == 'POST':
-        form_data = request.form
-        email = form_data.get('white_value')
+    user_agent = request.headers.get('User-Agent')
 
-        print( form_data.get('buyin'))
-
-        ChipValues=[form_data.get('black_value'),form_data.get('green_value'),form_data.get('blue_value'),form_data.get('red_value'),form_data.get('white_value')]
-        ChipValues=[float(x) for x in ChipValues]
-
-        min_chip_counts= [form_data.get('black_min'),form_data.get('green_min'),form_data.get('blue_min'),form_data.get('red_min'),form_data.get('white_min')]
-        min_chip_counts=[int(x) for x in min_chip_counts]
-
-        max_chip_counts=[form_data.get('black_max'),form_data.get('green_max'),form_data.get('blue_max'),form_data.get('red_max'),form_data.get('white_max')]
-        max_chip_counts=[int(x) for x in max_chip_counts]
-
-        buyIn=int(form_data.get('buyin'))
-        num_players=int(form_data.get('num_players'))
-
-
-        try:
-            for x in range(5):
-                if max_chip_counts[x] ==0:
-                    max_chip_counts[x]=default_max_chip[x]/num_players
-        except:
-            print()
-
-
-
-        PositiveIntSolToSpan_sorted = sort_2dlist(PositiveIntSolToSpan(ChipValues,buyIn,max_chip_counts,min_chip_counts))
-
-        df = pd.DataFrame(PositiveIntSolToSpan_sorted, columns=['Black', 'Green', 'Blue', 'Red', 'White'])
-        df= df.iloc[::-1, ::-1]
-        df = df.sort_values(by='White',ascending=False)
-        html_table = color_code_df(df)
-        return render_template('simple.html',  tables=[html_table], titles=df.columns.values)
+    # Detect if the user is on mobile or desktop
+    if "Mobile" in user_agent or "Android" in user_agent or "iPhone" in user_agent:
+        return render_template('mobile.html')
+    else:
+        return render_template('index.html')
     return render_template('mobile.html')
+
+
 
 def color_code_df(df):
     # Start building the HTML table
