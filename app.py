@@ -215,7 +215,7 @@ def upload_file():
                 image_path = file_path
 
             # Process the image and split it into PDF
-            output_pdf_path = os.path.join(app.config['OUTPUT_FOLDER'], 'output_chunks.pdf')
+            output_pdf_path = os.path.join(app.config['OUTPUT_FOLDER'], file.filename+'_split.pdf')
             split_image_to_pdf(image_path, output_pdf_path)
 
             # Return the PDF
