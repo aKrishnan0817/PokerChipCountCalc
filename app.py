@@ -1,25 +1,21 @@
-from flask import Flask, request, redirect, url_for, send_file, render_template
+from flask import Flask, request, redirect, url_for, send_file, render_template, jsonify
 import pandas as pd
 import numpy as np
 import os
 from PIL import Image
 from PyPDF2 import PdfReader
 import json
+from fuzzywuzzy import fuzz
 
 app = Flask(__name__)
-
 default_max_chip=[50,50,50,50,100]
 
-
-
-
-@app.route("/", methods=['GET', 'POST'])
-def hello():
+@app.route("/poker", methods=[ 'POST', 'GET'])
+def poker_chip_calculator():
     if request.method == 'POST':
 
 
         form_data = request.form
-        email = form_data.get('white_value')
 
         print( form_data.get('buyin'))
 
@@ -43,16 +39,13 @@ def hello():
         except:
             print()
 
-
-
-
         PositiveIntSolToSpan_sorted = sort_2dlist(PositiveIntSolToSpan(ChipValues,buyIn,max_chip_counts,min_chip_counts))
 
         df = pd.DataFrame(PositiveIntSolToSpan_sorted, columns=['Black', 'Green', 'Blue', 'Red', 'White'])
         df= df.iloc[::-1, ::-1]
         df = df.sort_values(by='White',ascending=False)
         html_table = color_code_df(df)
-        return render_template('simple.html',  tables=[html_table], titles=df.columns.values)
+        return render_template('pokerCountDisplay.html',  tables=[html_table], titles=df.columns.values)
 
     user_agent = request.headers.get('User-Agent')
 
@@ -60,7 +53,8 @@ def hello():
     if "Mobile" in user_agent or "Android" in user_agent or "iPhone" in user_agent:
         return render_template('mobile.html')
     else:
-        return render_template('index.html')
+        return render_template('pokerWeb.html')
+    
     return render_template('mobile.html')
 
 
@@ -182,8 +176,8 @@ def split_image_to_pdf(image_path, output_pdf_path, new_width=2550, chunk_height
     # Save the chunks as a single PDF
     image_chunks[0].save(output_pdf_path, save_all=True, append_images=image_chunks[1:])
 
-@app.route('/pdf')
-def index():
+@app.route('/remarkable_splitter')
+def remarkable_splitter():
     return render_template('pdf.html')
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -196,8 +190,8 @@ def upload_file():
         if file.filename == '':
             return redirect(request.url)
 
-        if file and (file.filename.endswith('.pdf') or file.filename.endswith(('.png', '.jpg', '.jpeg'))):
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        if file and file.filename.endswith(('.png', '.jpg', '.jpeg','.pdf')):
+            file_path = "uploads/"+file.filename
             file.save(file_path)
 
             # Process the file accordingly
@@ -207,7 +201,7 @@ def upload_file():
                 page = reader.pages[0]
 
                 # Save the page as an image (this might require additional processing)
-                image_path = os.path.join(app.config['UPLOAD_FOLDER'], 'output_image.png')
+                image_path = "uploads/" + file.filename + ".png"
                 page_image = page.to_image()  # Requires pdf2image
                 page_image.save(image_path)
             else:
@@ -215,13 +209,55 @@ def upload_file():
                 image_path = file_path
 
             # Process the image and split it into PDF
-            output_pdf_path = os.path.join(app.config['OUTPUT_FOLDER'], file.filename+'_split.pdf')
+
+            output_pdf_path = "output/" + file.filename + "_split.pdf"
             split_image_to_pdf(image_path, output_pdf_path)
 
             # Return the PDF
             return send_file(output_pdf_path, as_attachment=True)
-
     return render_template('pdf.html')
 
-if __name__ == "__main__":
-    app.run(debug=True)
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    return render_template('home.html')
+
+
+with open('taming_of_the_shrew.json', 'r') as f:
+    script_data = json.load(f)
+
+@app.route('/line_memorizer')
+def line_memorizer():
+    characters = sorted(set(line['speaker'] for act in script_data["acts"] for scene in act["scenes"] for line in scene["lines"]))
+    return render_template('line_memorizer.html', characters=characters)
+
+@app.route('/get_script', methods=['POST'])
+def get_script():
+    return jsonify(script_data)
+
+@app.route('/toggle_lines', methods=['POST'])
+def toggle_lines():
+    selected_character = request.json.get('character')
+    return jsonify({"character": selected_character})
+
+@app.route('/check_speech', methods=['POST'])
+def check_speech():
+    data = request.get_json()
+    spoken_text = data.get("spoken_text")
+    correct_text = data.get("correct_text")
+
+    print(f"Spoken: {spoken_text}")
+    print(f"Correct: {correct_text}")
+
+    if not spoken_text or not correct_text:
+        return jsonify({"result": "Error: Missing data", "correct": False})
+
+    # Simple case-insensitive comparison (can improve with NLP)
+    ratio = fuzz.ratio(spoken_text.strip().lower(), correct_text.strip().lower())
+    if ratio > 80:
+        return jsonify({"result": "Correct!", "correct": True})
+    return jsonify({"result": "Try again!", "correct": False})
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5002)

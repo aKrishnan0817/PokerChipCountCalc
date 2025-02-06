@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Script Viewer</title>
+        
+        <!-- Load external CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        
+        <!-- Load jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        
+        <!-- Load external JavaScript -->
+        <script src="{{ url_for('static', filename='scripts.js') }}" defer></script>
+    </head>
+    
+<body>
+    <div id="sidebar">
+        <h2>Outline</h2>
+        <ul id="scene-list"></ul>
+    </div>
+    
+    <div id="content">
+        <h1>Line Memorizer</h1>
+        <label for="character-select">Select Your Character:</label>
+        <select id="character-select">
+            {% for character in characters %}
+                <option value="{{ character }}">{{ character }}</option>
+            {% endfor %}
+        </select>
+        
+        <div id="script-container"></div>
+    </div>
+
+    <!-- Floating toggle all overlays button -->
+    <button id="toggle-all" class="floating-button">☰</button>
+    
+   
+</body>
+</html>

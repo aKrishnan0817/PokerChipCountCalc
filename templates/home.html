@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atul's Projects</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 50px 20px;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        .projects {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .project-box {
+            background-color: #fff;
+            padding: 20px;
+            width: 250px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        .project-box:hover {
+            transform: scale(1.1);
+        }
+        a {
+            text-decoration: none;
+            color: black;
+        }
+        .project-box img {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>I am Atul.</h1>
+        <p>Here are a few semi-useful projects I have made.</p>
+        <div class="projects">
+            <a href="/poker" class="project-box">
+                <img src="{{ url_for('static', filename='poker_chip.png') }}" alt="Poker Chip">
+                Poker Chip Count Calculator
+            </a>
+            <a href="/line_memorizer" class="project-box">
+                <img src="{{ url_for('static', filename='shakespear.png') }}" alt="Shakespeare">
+                Line Memorizer
+            </a>
+            <a href="/remarkable_splitter" class="project-box">
+                <img src="{{ url_for('static', filename='textbook.png') }}" alt="Textbook">
+                Remarkable Page Splitter
+            </a>
+        </div>
+    </div>
+</body>
+</html>
