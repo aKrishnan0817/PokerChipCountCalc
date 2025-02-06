@@ -11,17 +11,19 @@ $(document).ready(function() {
                 $('#script-container').append(`<h2 id="act-${act.act}" style="margin-bottom: 5px;">Act ${act.act}</h2>`);
                 $('#script-container').append(`<h3 id="${sceneId}" style="margin-bottom: 5px;">Scene ${scene.scene}: ${scene.title}</h3>`);
                 scene.lines.forEach(line => {
+                    let formattedText = line.text.replace(/\n/g, '<br>'); // Converts newlines to <br>
                     $('#script-container').append(`
                         <div class="speech" data-speaker="${line.speaker}" style="margin-bottom: 1px; padding-bottom: 1px; display: flex; flex-direction: column; position: relative;">
                             <div class="speaker-container" style="display: flex; align-items: center; gap: 3px;">
                                 <span class="speaker" style="font-weight: bold;">${line.speaker}</span>
                                 <button class="toggle-btn" data-state="visible" style="padding: 2px 4px; font-size: 10px; background: #007bff; color: white; border: none; cursor: pointer; border-radius: 3px;">👁</button>
                             </div>
-                            <span class="line-text" style="display: block; margin-left: 5px; line-height: 1.1; margin-top: 1px;">${line.text}</span>
+                            <span class="line-text" style="display: block; margin-left: 5px; line-height: 1.3; margin-top: 1px;">${formattedText}</span>
                         </div>
                     `);
                 });
             });
+            
         });
     }
     function scrollToElement(elementId) {
