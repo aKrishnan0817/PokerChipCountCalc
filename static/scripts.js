@@ -1,4 +1,42 @@
 $(document).ready(function() {
+    $('#character-select').change(function() {
+                        let selectedCharacter = $(this).val();
+                        if (selectedCharacter) {
+                            $('.speech').each(function() {
+                                if ($(this).attr('data-speaker') === selectedCharacter) {
+                                    if (!$(this).find('.overlay').length) {
+                                        let fullText = $(this).find(".line-text").html();
+                                        $(this).find('.line-text').append('<div class="overlay" style="position: absolute; width: 100%; height: 100%; background: lightgreen; display: flex; flex-direction: row; align-items: flex-end; justify-content: center; top: 0; left: 0; border-radius: 8px; padding: 10px; overflow: hidden; white-space: pre-wrap;"><button class="prev-line arrow-button">⬅</button><button class="mic-btn" data-line="' + fullText + '" style="padding: 5px; border: none; background: none; border-radius: 50%; cursor: pointer;">🎤</button><button class="hint-btn" data-hint="' + fullText + '" data-hint-progress="0" style="background: none; border-radius: 5px; padding: 5px;">💡</button><button class="next-line arrow-button">➡</button></div>');
+                                    }
+                                }
+                            });
+                        }
+                    });
+            
+                    $(document).on('click', '.hint-btn', function() {
+                        let hintButton = $(this);
+                        let overlay = hintButton.closest('.overlay');
+                        let textContainer = overlay.siblings('.line-text');
+                        let fullText = hintButton.siblings('.mic-btn').attr('data-line');
+                        let words = fullText.split(/\s+/);
+                        let progress = parseInt(hintButton.attr('data-hint-progress')) || 0;
+            
+                        if (progress < words.length) {
+                            let revealCount = Math.min(progress + 2, words.length);
+                            let revealedText = words.slice(0, revealCount).join(' ') + (revealCount < words.length ? '...' : '');
+                            
+                            // Position words correctly and preserve line breaks
+                            let hintSpan = overlay.find('.hint-text');
+                            if (!hintSpan.length) {
+                                overlay.append('<div class="hint-text" style="position: absolute; top: 10px; left: 10px; width: calc(100% - 20px); font-weight: bold; color: black; padding: 8px; border-radius: 5px; white-space: pre-wrap; overflow: hidden;">' + revealedText + '</div>');
+                            } else {
+                                hintSpan.html(revealedText.replace(/\n/g, '<br>'));
+                            }
+                            
+                            hintButton.attr('data-hint-progress', revealCount);
+                        }
+                    });
+
     function displayScript(script) {
         $('#script-container').empty();
         $('#scene-list').empty();
@@ -26,6 +64,20 @@ $(document).ready(function() {
             
         });
     }
+
+    $.ajax({
+        url: '/get_character',
+        type: 'GET',
+        success: function(response) {
+            if (response.character) {
+                $('#character-select').val(response.character);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error retrieving character:", status, error);
+        }
+    });
+
     function scrollToElement(elementId) {
         $('html, body').animate({
             scrollTop: $(`#${elementId}`).offset().top
@@ -46,9 +98,11 @@ $(document).ready(function() {
         $('.speech').each(function() {
             if ($(this).attr('data-speaker') === speaker) {
                 let lineText = $(this).find('.line-text');
+                let fullText = lineText.html();
                 let toggleBtn = $(this).find('.toggle-btn');
                 if (toggleBtn.attr('data-state') === "visible") {
-                    lineText.append('<div class="overlay" style="position: absolute; width: 100%; height: 100%; background: lightgreen; display: flex; align-items: center; justify-content: center;"><button class="mic-btn" data-line="' + lineText.text() + '" style="padding: 5px; border: none; background: white; border-radius: 50%; cursor: pointer;">🎤</button></div>');
+                    //lineText.append('<div class="overlay" style="position: absolute; width: 100%; height: 100%; background: lightgreen; display: flex; align-items: center; justify-content: center;"><button class="mic-btn" data-line="' + lineText.text() + '" style="padding: 5px; border: none; background: white; border-radius: 50%; cursor: pointer;">🎤</button></div>');
+                    lineText.append('<div class="overlay" style="position: absolute; width: 100%; height: 100%; background: lightgreen; display: flex; flex-direction: row; align-items: flex-end; justify-content: center; top: 0; left: 0; border-radius: 8px; padding: 10px; overflow: hidden; white-space: pre-wrap;"><button class="prev-line arrow-button">⬅</button><button class="mic-btn" data-line="' + fullText+ '" style="padding: 5px; border: none; background: none; border-radius: 50%; cursor: pointer;">🎤</button><button class="hint-btn" data-hint="' + lineText.text() + '" data-hint-progress="0" style="background: none; border-radius: 5px; padding: 5px;">💡</button><button class="next-line arrow-button">➡</button></div>');
                     toggleBtn.html('🚫👁').attr('data-state', 'hidden');
                 } else {
                     lineText.find('.overlay').remove();
@@ -114,3 +168,38 @@ $(document).ready(function() {
         displayScript(data);
     }, 'json');
 });
+
+function toggleSidebar() {
+    let sidebar = document.getElementById("sidebar");
+    let content = document.getElementById("content");
+    
+    if (sidebar.classList.contains("active")) {
+        sidebar.classList.remove("active");
+        sidebar.style.transform = "translateX(-100%)";
+        content.style.marginLeft = "0";
+    } else {
+        sidebar.classList.add("active");
+        sidebar.style.transform = "translateX(0)";
+        content.style.marginLeft = "270px";
+    }
+}
+
+$('#character-select').change(function() {
+    let selectedCharacter = $(this).val();
+
+    $.ajax({
+        url: '/set_character',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ character: selectedCharacter }),
+        success: function(response) {
+            console.log("Selected character:", response.character);
+        },
+        error: function(xhr, status, error) {
+            console.error("Error setting character:", status, error);
+        }
+    });
+});
+
+// Retrieve the selected character on page load
+
