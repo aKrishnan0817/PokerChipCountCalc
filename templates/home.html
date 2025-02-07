@@ -14,6 +14,7 @@
         }
         .container {
             padding: 50px 20px;
+            padding-top: 0px;
         }
         h1 {
             font-size: 2.5em;
@@ -32,8 +33,8 @@
         .project-box {
             background-color: #fff;
             padding: 20px;
-            width: 250px;
-            height: 200px;
+            width: 240px;
+            height: 180px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -73,25 +74,31 @@
 </head>
 <body>
     <div class="container">
-        <h1>I am Atul.</h1>
-        <p>Here lies some of the projects I have made.</p>
+        <h1>I am Atul</h1>
+        <p>Here lies some of the projects <i>(with web interfaces)</i> I have made.</p>
         <div class="projects">
-            <a href="/poker" class="project-box">
-                <img src="{{ url_for('static', filename='poker_chip.png') }}" alt="Poker Chip">
-                Poker Chip Count Calculator
-            </a>
             <a href="/line_memorizer" class="project-box">
                 <img src="{{ url_for('static', filename='shakespear.png') }}" alt="Shakespeare">
                 Line Memorizer
-            </a>
-            <a href="/remarkable_splitter" class="project-box">
-                <img src="{{ url_for('static', filename='textbook.png') }}" alt="Textbook">
-                Remarkable Page Splitter
             </a>
             <a href="{{ url_for('static', filename='Inverse_Neural_Net.pdf') }}" class="project-box">
                 <iframe src="{{ url_for('static', filename='Inverse_Neural_Net.pdf') }}"></iframe>
                 My Research (In Progress)
             </a>
+            <a href="https://atulkrishnan.pythonanywhere.com/" class="project-box">
+                <img src="{{ url_for('static', filename='take5_logo.png') }}" alt="Take5 Logo">
+                Take5
+            </a>
+            <a href="/poker" class="project-box">
+                <img src="{{ url_for('static', filename='poker_chip.png') }}" alt="Poker Chip">
+                Poker Chip Count Calculator
+            </a>
+            
+            <a href="/remarkable_splitter" class="project-box">
+                <img src="{{ url_for('static', filename='textbook.png') }}" alt="Textbook">
+                Remarkable Page Splitter
+            </a>
+            
         </div>
         
         <div class="github-link">
