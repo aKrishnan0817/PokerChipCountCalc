@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Relativistic Image Transformation</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <style>
+    body {
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding-top: 30px;
+    }
+    .container {
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    h1, h4 {
+      color: #333333;
+    }
+    .side-by-side {
+       display: flex;
+       justify-content: space-around;
+       align-items: center;
+       flex-wrap: wrap;
+       margin-top: 20px;
+    }
+    .side-by-side .img-container {
+       flex: 1 1 45%;
+       text-align: center;
+       margin: 10px;
+    }
+    .side-by-side img {
+       max-width: 100%;
+       height: auto;
+       border: 1px solid #ccc;
+       padding: 5px;
+       background: #f8f8f8;
+       border-radius: 4px;
+    }
+    .form-control, .form-control-file {
+      border-radius: 4px;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+      border-radius: 4px;
+    }
+    .explanation-section {
+      margin-top: 40px;
+      padding: 20px;
+      background: #f1f1f1;
+      border-left: 5px solid #007bff;
+      border-radius: 4px;
+    }
+    .explanation-section p, .explanation-section li {
+      font-size: 1rem;
+      color: #444444;
+    }
+  </style>
+  <!-- MathJax for LaTeX rendering -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+  <script>
+    // Validate that a file has been selected before submitting the form.
+    function validateForm() {
+      var fileInput = document.getElementById("file");
+      if (fileInput.value === "") {
+        alert("Please input an image first.");
+        return false;
+      }
+      return true;
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center">Relativistic Image Transformation</h1>
+    <hr>
+    <div class="mb-4">
+        {{ explanation | safe }}
+      </div>
+    <!-- Side-by-side Before and After images -->
+    <div class="side-by-side">
+      <div class="img-container">
+        <h4>Before Transformation</h4>
+        <img src="{% if original_image_url %}{{ original_image_url }}{% else %}{{ url_for('static', filename='before.png') }}{% endif %}" alt="Before Transformation">
+      </div>
+      <div class="img-container">
+        <h4>After Transformation</h4>
+        {% if result_image_url %}
+          <img src="{{ result_image_url }}" alt="After Transformation">
+        {% else %}
+          <img src="{{ url_for('static', filename='after.png') }}" alt="After Transformation">
+        {% endif %}
+      </div>
+    </div>
+    
+    <!-- Transformation Form -->
+    <form method="POST" enctype="multipart/form-data" onsubmit="return validateForm();" class="mt-4">
+      <div class="form-group">
+        <label for="file"><strong>Upload your image</strong> (or use an example):</label>
+        <input type="file" class="form-control-file" name="file" id="file">
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-2">
+          <label for="v">Speed (v):</label>
+          <input type="number" step="0.01" class="form-control" name="v" id="v" value="{{ params.v }}">
+        </div>
+        <div class="form-group col-md-2">
+          <label for="L">Observer Distance (L):</label>
+          <input type="number" step="0.1" class="form-control" name="L" id="L" value="{{ params.L }}">
+        </div>
+        <div class="form-group col-md-2">
+          <label for="width_phys">Physical Width:</label>
+          <input type="number" step="0.1" class="form-control" name="width_phys" id="width_phys" value="{{ params.width_phys }}">
+        </div>
+        <div class="form-group col-md-2">
+          <label for="height_phys">Physical Height:</label>
+          <input type="number" step="0.1" class="form-control" name="height_phys" id="height_phys" value="{{ params.height_phys }}">
+        </div>
+        <div class="form-group col-md-2">
+          <label for="f">Focal Length (f):</label>
+          <input type="number" step="0.1" class="form-control" name="f" id="f" value="{{ params.f }}">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Transform Image</button>
+    </form>
+    
+    {% if error %}
+      <div class="alert alert-danger mt-3">{{ error }}</div>
+    {% endif %}
+    
+    <!-- Detailed Explanation Section -->
+    <div class="explanation-section">
+      <h4>The Math and Process</h4>
+
+      <ul>
+        <li>
+          <strong>Lorentz Transformation:</strong>
+          This transformation relates the space and time coordinates between two inertial frames:
+          $$ 
+          \begin{bmatrix} x' \\ t' \end{bmatrix} =
+          \begin{bmatrix} \gamma & -\gamma \, v/c \\ -\gamma \, v/c & \gamma \end{bmatrix} 
+          \begin{bmatrix} x \\ t \end{bmatrix}
+          $$
+          where \( \gamma = \frac{1}{\sqrt{1-v^2/c^2}} \).
+        </li>
+        <li>
+          <strong>Retarded Time Calculation:</strong>
+          Each pixel’s light emission time \(t_r\) satisfies:
+          $$ 
+          t_r + \sqrt{(x + v\,t_r)^2 + y^2 + L^2} = 0
+          $$
+          to account for light-travel time delay.
+        </li>
+        <li>
+          <strong>Perspective Projection:</strong>
+          With the retarded time computed, the emission point is:
+          $$ 
+          X = x + v\,t_r, \quad Y = y 
+          $$
+          and then projected using:
+          $$ 
+          u = \frac{X\,f}{L}, \quad w = \frac{Y\,f}{L}
+          $$
+        </li>
+        <li>
+          <strong>Doppler Shift:</strong>
+          The light’s frequency is shifted according to:
+          $$ 
+          D = \sqrt{\frac{1+v\cos\theta}{1-v\cos\theta}}
+          $$
+          with \( \cos\theta = \frac{X}{\sqrt{X^2+Y^2+L^2}} \), resulting in blue-shift for approaching regions and red-shift for receding regions.
+        </li>
+        <li>
+          <strong>Image Remapping:</strong>
+          The computed continuous coordinates \((u,w)\) are then mapped onto a discrete pixel grid, averaging overlapping contributions.
+        </li>
+      </ul>
+   
+    </div>
+  </div>
+</body>
+</html>
